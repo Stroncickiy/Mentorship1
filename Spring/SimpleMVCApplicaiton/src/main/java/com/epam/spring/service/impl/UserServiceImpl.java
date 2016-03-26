@@ -16,53 +16,49 @@ import java.util.Set;
 public class UserServiceImpl implements UserService {
 
 
-    private  final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
+    private final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
 
     private final java.util.Random rand = new java.util.Random();
 
-   private final Set<String> identifiers = new HashSet<>();
+    private final Set<String> identifiers = new HashSet<>();
 
     @Autowired
-    private UserDAO userDAO;
+    private UserDAO dao;
 
 
-    public Long register(User user) {
-        return userDAO.add(user);
+    public User register(User user) {
+        return dao.add(user);
     }
 
-    public Boolean remove(long id) {
-        return userDAO.remove(id);
+    public void remove(long id) {
+        dao.remove(id);
     }
 
     public User getById(long id) {
-        return userDAO.getById(id);
+        return dao.getById(id);
     }
 
     @Override
     public List<User> getAll() {
-        return userDAO.getAll();
+        return dao.getAll();
     }
 
-    @Override
-    public Boolean isUserExist(User user) {
-        return userDAO.isUserExists(user);
-    }
 
     @Override
-    public Boolean update(User user) {
-        return userDAO.update(user);
+    public void update(User user) {
+        dao.update(user);
     }
 
     @Async
     @Override
-    public Boolean processAllUsers() {
-        return userDAO.processNonProcessedUsers();
+    public void processAllUsers() {
+        dao.processNonProcessedUsers();
     }
 
-    @Scheduled(cron = "0 0 * *  * Mon")
+    @Scheduled(cron = "0 0 * * * Mon")
     @Override
     public void removeAllProccessedByDateAndTime() {
-        userDAO.remoAllProcessed();
+        dao.removeAllProcessed();
     }
 
     @Scheduled(fixedDelay = 10_000)
@@ -72,7 +68,7 @@ public class UserServiceImpl implements UserService {
         user.setProcessed(false);
         user.setLastName(randomIdentifier());
         user.setFirstName(randomIdentifier());
-        userDAO.add(user);
+        dao.add(user);
     }
 
     private String randomIdentifier() {
@@ -89,8 +85,12 @@ public class UserServiceImpl implements UserService {
 
     @Async
     @Override
-    public void longMethod() throws InterruptedException {
-        Thread.sleep(11_000);
+    public void longMethod() {
+        try {
+            Thread.sleep(11_000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
 }

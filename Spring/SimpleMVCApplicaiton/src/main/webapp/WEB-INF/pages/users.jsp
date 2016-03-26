@@ -11,8 +11,8 @@
 <body>
 <h1>All users</h1>
 <div id="content">
-    <a href="users/process">Process All</a>
-    <a href="users/add">Add user</a>
+    <a href="${pageContext.request.contextPath}/users/process">Process All</a>
+    <a href="${pageContext.request.contextPath}/users/add">Add user</a>
 
     <table class="table table-bordered">
         <thead>
@@ -31,7 +31,8 @@
                 <td>${user.firstName}</td>
                 <td>${user.lastName}</td>
                 <td>${user.processed}</td>
-                <td><a href="${pageContext.request.contextPath}/users/remove/${user.id}">Remove</a></td>
+                <td><a href="${pageContext.request.contextPath}/users/remove/${user.id}">Remove</a>
+                    <a href="${pageContext.request.contextPath}/users/edit/${user.id}">Edit</a></td>
             </tr>
         </c:forEach>
         </tbody>

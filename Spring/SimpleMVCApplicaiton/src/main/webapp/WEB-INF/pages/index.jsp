@@ -10,7 +10,7 @@
 </head>
 <body>
 <div id="content" class="bg-success" style="height: 100%">
-    <a href="users">Users</a>
+    <a href="users/all">Users</a>
     <a href="executions/all">All Executions </a>
     <a href="executions/long">Long Executions </a>
     <a href="executions/startLong">Long Method </a>
