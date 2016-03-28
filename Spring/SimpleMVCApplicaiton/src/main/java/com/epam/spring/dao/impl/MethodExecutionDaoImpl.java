@@ -39,7 +39,7 @@ public class MethodExecutionDAOImpl implements MethodExecutionDAO {
     @Override
     public void update(MethodExecutionRecord item) {
         String query = "UPDATE  executions SET method_name=?,duration=?,execution_started=?,is_long=? WHERE id=?";
-        int updated = jdbcTemplate.update(connection -> {
+        jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setString(1, item.getMethodName());
             preparedStatement.setLong(2, item.getDuration().toMillis());
