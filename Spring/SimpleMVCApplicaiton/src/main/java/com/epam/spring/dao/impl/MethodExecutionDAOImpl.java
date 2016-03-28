@@ -14,7 +14,7 @@ import java.time.Duration;
 import java.util.List;
 
 @Repository
-public class MethodExecutionDAOImpl2 implements MethodExecutionDAO {
+public class MethodExecutionDAOImpl implements MethodExecutionDAO {
 
     @Autowired
     private JdbcTemplate jdbcTemplate;
