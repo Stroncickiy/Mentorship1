@@ -6,7 +6,10 @@ import com.epam.spring.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 @Controller
 @RequestMapping("users")
@@ -30,7 +33,6 @@ public class UserController {
 
     @RequestMapping(path = "/add", method = RequestMethod.POST)
     public String addUser(@ModelAttribute User newUser) {
-        newUser.setProcessed(false);
         userService.register(newUser);
         return "redirect:/users/all";
     }

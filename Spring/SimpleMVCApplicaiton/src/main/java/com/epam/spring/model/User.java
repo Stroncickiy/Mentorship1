@@ -1,6 +1,9 @@
 package com.epam.spring.model;
 
+import org.springframework.format.annotation.DateTimeFormat;
+
 import javax.persistence.Id;
+import java.time.LocalDate;
 
 
 public class User {
@@ -9,6 +12,8 @@ public class User {
     private String firstName;
     private String lastName;
     private boolean processed;
+    @DateTimeFormat(pattern = "MM/dd/yyyy")
+    private LocalDate birthday;
 
     public Long getId() {
         return id;
@@ -40,5 +45,13 @@ public class User {
 
     public void setProcessed(boolean processed) {
         this.processed = processed;
+    }
+
+    public LocalDate getBirthday() {
+        return birthday;
+    }
+
+    public void setBirthday(LocalDate birthday) {
+        this.birthday = birthday;
     }
 }

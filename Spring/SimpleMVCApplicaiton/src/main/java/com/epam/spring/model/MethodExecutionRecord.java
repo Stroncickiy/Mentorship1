@@ -2,7 +2,6 @@ package com.epam.spring.model;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.Date;
 
 public class MethodExecutionRecord {
     private Long id;

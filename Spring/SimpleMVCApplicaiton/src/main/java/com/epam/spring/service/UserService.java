@@ -1,7 +1,6 @@
 package com.epam.spring.service;
 
 import com.epam.spring.model.User;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

@@ -7,7 +7,7 @@
 	src="${pageContext.request.contextPath}/resources/lib/js/moment.js"></script>
 <script type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/lib/js/transition.js"></script>
-	
+
 <script  type="text/javascript"
 	src="${pageContext.request.contextPath}/resources/lib/js/bootstrap-datetimepicker.min.js"></script>
 
