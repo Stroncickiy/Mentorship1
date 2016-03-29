@@ -14,22 +14,22 @@ import java.util.List;
 public class MethodExecutionServiceImpl implements MethodExecutionService {
 
     @Autowired
-    private MethodExecutionDAO dao;
+    private MethodExecutionDAO methodExecutionDAO;
 
     @Async
     @Override
     public void register(MethodExecutionRecord record) {
-        dao.add(record);
+        methodExecutionDAO.add(record);
     }
 
     @Override
     public List<MethodExecutionRecord> getAll() {
-        return dao.getAll();
+        return methodExecutionDAO.getAll();
     }
 
     @Override
     public List<MethodExecutionRecord> getLongRunningMethods() {
-        return dao.getLongRunningMethods();
+        return methodExecutionDAO.getLongRunningMethods();
     }
 
 

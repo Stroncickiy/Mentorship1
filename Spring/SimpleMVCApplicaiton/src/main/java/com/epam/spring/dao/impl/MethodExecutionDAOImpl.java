@@ -53,7 +53,7 @@ public class MethodExecutionDAOImpl implements MethodExecutionDAO {
     @Override
     public void remove(Long key) {
         String query = "DELETE FROM executions  WHERE id=? ";
-        int removed = jdbcTemplate.update(connection -> {
+        jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(query);
             preparedStatement.setLong(1, key);
             return preparedStatement;
@@ -63,10 +63,9 @@ public class MethodExecutionDAOImpl implements MethodExecutionDAO {
     @Override
     public List<MethodExecutionRecord> getAll() {
         String query = "SELECT * FROM executions ";
-        List<MethodExecutionRecord> executionList = jdbcTemplate.query(query, (resultSet, i) -> {
+        return jdbcTemplate.query(query, (resultSet, i) -> {
             return getExecutionsFromRS(resultSet);
         });
-        return executionList;
     }
 
     private MethodExecutionRecord getExecutionsFromRS(ResultSet resultSet) throws SQLException {
@@ -91,11 +90,10 @@ public class MethodExecutionDAOImpl implements MethodExecutionDAO {
 
     public List<MethodExecutionRecord> getLongRunningMethods() {
         String query = "SELECT * FROM executions WHERE is_long=? ";
-        List<MethodExecutionRecord> executionList = jdbcTemplate.query(query, preparedStatement -> {
+        return jdbcTemplate.query(query, preparedStatement -> {
             preparedStatement.setBoolean(1, true);
         }, (resultSet, i) -> {
             return getExecutionsFromRS(resultSet);
         });
-        return executionList;
     }
 }

@@ -20,7 +20,6 @@ public class UserDAOImpl implements UserDAO {
 
     @Override
     public User add(User user) {
-
         String query = "INSERT INTO users (firstName,lastName,processed,birthday) VALUES (?,?,?,?)";
         KeyHolder holder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
@@ -63,10 +62,9 @@ public class UserDAOImpl implements UserDAO {
     @Override
     public List<User> getAll() {
         String query = "SELECT * FROM users ";
-        List<User> userstList = jdbcTemplate.query(query, (resultSet, i) -> {
+        return jdbcTemplate.query(query, (resultSet, i) -> {
             return getUserFromRS(resultSet);
         });
-        return userstList;
     }
 
 

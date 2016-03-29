@@ -9,57 +9,52 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+import java.util.Random;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-
     private final String lexicon = "ABCDEFGHIJKLMNOPQRSTUVWXYZ12345674890";
-
-    private final java.util.Random rand = new java.util.Random();
-
-    private final Set<String> identifiers = new HashSet<>();
+    private final Random rand = new Random();
 
     @Autowired
-    private UserDAO dao;
+    private UserDAO userDAO;
 
 
     public User register(User user) {
-        return dao.add(user);
+        return userDAO.add(user);
     }
 
     public void remove(long id) {
-        dao.remove(id);
+        userDAO.remove(id);
     }
 
     public User getById(long id) {
-        return dao.getById(id);
+        return userDAO.getById(id);
     }
 
     @Override
     public List<User> getAll() {
-        return dao.getAll();
+        return userDAO.getAll();
     }
 
 
     @Override
     public void update(User user) {
-        dao.update(user);
+        userDAO.update(user);
     }
 
     @Async
     @Override
     public void processAllUsers() {
-        dao.processNonProcessedUsers();
+        userDAO.processNonProcessedUsers();
     }
 
     @Scheduled(cron = "${processUsersCronExpression}")
     @Override
     public void removeAllProccessedByDateAndTime() {
-        dao.removeAllProcessed();
+        userDAO.removeAllProcessed();
     }
 
     @Scheduled(fixedDelay = 10_000)
@@ -70,17 +65,14 @@ public class UserServiceImpl implements UserService {
         user.setLastName(randomIdentifier());
         user.setFirstName(randomIdentifier());
         user.setBirthday(LocalDate.now());
-        dao.add(user);
+        userDAO.add(user);
     }
 
     private String randomIdentifier() {
         StringBuilder builder = new StringBuilder();
-        while (builder.toString().length() == 0) {
-            int length = rand.nextInt(5) + 5;
-            for (int i = 0; i < length; i++)
-                builder.append(lexicon.charAt(rand.nextInt(lexicon.length())));
-            if (identifiers.contains(builder.toString()))
-                builder = new StringBuilder();
+        int length = rand.nextInt(5) + 5;
+        for (int i = 0; i < length; i++) {
+            builder.append(lexicon.charAt(rand.nextInt(lexicon.length())));
         }
         return builder.toString();
     }

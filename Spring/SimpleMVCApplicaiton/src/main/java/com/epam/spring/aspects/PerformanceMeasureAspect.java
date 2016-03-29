@@ -38,18 +38,17 @@ public class PerformanceMeasureAspect {
     public Object measurePerformance(ProceedingJoinPoint joinPoint) throws Throwable {
 
         long startTime = System.currentTimeMillis();
-        String methodName = joinPoint.getSignature().getName();
         Object result = joinPoint.proceed();
-
         long endedTime = System.currentTimeMillis();
 
+        long methodDurationInMillis = endedTime - startTime;
+
         MethodExecutionRecord record = new MethodExecutionRecord();
-        record.setDuration(Duration.ofMillis(endedTime - startTime));
+        record.setDuration(Duration.ofMillis(methodDurationInMillis));
         record.setExecuted(LocalDateTime.now());
-        record.setMethodName(methodName);
+        record.setMethodName(joinPoint.getSignature().getName());
 
-
-        if (endedTime - startTime > permittedExecutionTime) {
+        if (methodDurationInMillis > permittedExecutionTime) {
             record.setPermittedDurationExceeded(true);
             eventPublisher.publishEvent(new LongMethodRunningEvent(record, this));
         }

@@ -50,4 +50,16 @@ public class MethodExecutionRecord {
     public void setPermittedDurationExceeded(boolean permittedDurationExceeded) {
         this.permittedDurationExceeded = permittedDurationExceeded;
     }
+
+
+    @Override
+    public String toString() {
+        return "MethodExecutionRecord{" +
+                "id=" + id +
+                ", methodName='" + methodName + '\'' +
+                ", duration=" + duration +
+                ", executed=" + executed +
+                ", permittedDurationExceeded=" + permittedDurationExceeded +
+                '}';
+    }
 }
