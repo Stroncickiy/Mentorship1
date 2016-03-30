@@ -34,11 +34,9 @@ public class MethodExecutionsController {
 
     @RequestMapping("/startLong")
     public String startLong() {
-        try {
-            userService.longMethod();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        userService.longMethod();
+
         return "redirect:/executions/long";
     }
 }
