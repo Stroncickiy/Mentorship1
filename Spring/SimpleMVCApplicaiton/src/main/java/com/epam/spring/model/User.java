@@ -3,7 +3,6 @@ package com.epam.spring.model;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Id;
-import javax.validation.constraints.Past;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 

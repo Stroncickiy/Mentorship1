@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
 
     @Scheduled(cron = "${processUsersCronExpression}")
     @Override
-    public void removeAllProccessedByDateAndTime() {
+    public void removeAllProcessedByDateAndTime() {
         userDAO.removeAllProcessed();
     }
 

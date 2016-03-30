@@ -20,11 +20,11 @@ public interface UserService {
 
     void processAllUsers();
 
-    void removeAllProccessedByDateAndTime();
+    void removeAllProcessedByDateAndTime();
 
 
     void addUserToDbScheduled();
 
-    void longMethod() throws InterruptedException;
+    void longMethod();
 }
 
