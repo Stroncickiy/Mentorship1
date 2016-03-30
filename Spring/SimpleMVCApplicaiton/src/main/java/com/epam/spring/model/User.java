@@ -3,6 +3,8 @@ package com.epam.spring.model;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.Id;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 
@@ -10,6 +12,7 @@ public class User {
     @Id
     private Long id;
     private String firstName;
+    @Size(min = 3, max = 10)
     private String lastName;
     private boolean processed;
     @DateTimeFormat(pattern = "MM/dd/yyyy")

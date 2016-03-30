@@ -3,17 +3,26 @@ package com.epam.spring.controller;
 
 import com.epam.spring.model.User;
 import com.epam.spring.service.UserService;
+import com.epam.spring.validator.UserValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.Errors;
+import org.springframework.web.bind.EscapedErrors;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.validation.Valid;
+
 @Controller
 @RequestMapping("users")
 public class UserController {
+
+    @Autowired
+    private UserValidator userValidator;
 
     @Autowired
     private UserService userService;
@@ -32,7 +41,12 @@ public class UserController {
     }
 
     @RequestMapping(path = "/add", method = RequestMethod.POST)
-    public String addUser(@ModelAttribute User newUser) {
+    public String addUser(@ModelAttribute @Valid User newUser, BindingResult bindingResult, Model model) {
+        userValidator.validate(newUser, bindingResult);
+        if (bindingResult.hasErrors()) {
+            model.addAttribute("message", bindingResult.getAllErrors());
+            return "message";
+        }
         userService.register(newUser);
         return "redirect:/users/all";
     }
