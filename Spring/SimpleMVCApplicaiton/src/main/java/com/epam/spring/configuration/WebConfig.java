@@ -27,7 +27,7 @@ import java.util.concurrent.Executor;
 @EnableAutoConfiguration
 @ComponentScan(basePackages = "com.epam.spring.*")
 @PropertySources({
-        @PropertySource("classpath:app.properties"),
+        @PropertySource("classpath:app.properties"), @PropertySource("classpath:messages.properties")
 })
 @EnableAsync
 @EnableScheduling
