@@ -26,5 +26,7 @@ public interface UserService {
     void addUserToDbScheduled();
 
     void longMethod();
+
+	User getUserByEmail(String email);
 }
 

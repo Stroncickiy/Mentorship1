@@ -23,7 +23,7 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-    @InitBinder
+     @InitBinder
     private void initBinder(WebDataBinder binder) {
         binder.setValidator(userValidator);
     }

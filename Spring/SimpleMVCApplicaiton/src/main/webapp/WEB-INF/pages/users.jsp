@@ -13,7 +13,7 @@
 <div id="content">
     <a href="${pageContext.request.contextPath}/users/process">Process All</a>
     <a href="${pageContext.request.contextPath}/users/add">Add user</a>
-
+    <a href="${pageContext.request.contextPath}/logout">Logout</a>
     <table class="table table-bordered">
         <thead>
         <tr>

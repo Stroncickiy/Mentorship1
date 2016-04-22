@@ -16,7 +16,6 @@
 <div id="content">
 
     <form:form action="${pageContext.request.contextPath}/users/add" commandName="newUser" method="post">
-
         <form:label path="firstName">FirstName</form:label>
         <form:input path="firstName"></form:input>
         <form:label path="lastName">LastName</form:label>

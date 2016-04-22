@@ -9,5 +9,7 @@ public interface UserDAO extends CommonDAO<User> {
 
     void removeAllProcessed();
 
+	User getUserByEmail(String email);
+
 
 }

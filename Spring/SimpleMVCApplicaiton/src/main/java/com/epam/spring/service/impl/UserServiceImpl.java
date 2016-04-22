@@ -64,6 +64,9 @@ public class UserServiceImpl implements UserService {
         user.setProcessed(false);
         user.setLastName(randomIdentifier());
         user.setFirstName(randomIdentifier());
+        user.setEmail(randomIdentifier()+"@gmail.com");
+        user.setPassword(randomIdentifier());
+        user.setEnabled(true);
         user.setBirthday(LocalDate.now());
         userDAO.add(user);
     }
@@ -86,5 +89,10 @@ public class UserServiceImpl implements UserService {
             e.printStackTrace();
         }
     }
+
+	@Override
+	public User getUserByEmail(String email) {
+		return userDAO.getUserByEmail(email);
+	}
 
 }

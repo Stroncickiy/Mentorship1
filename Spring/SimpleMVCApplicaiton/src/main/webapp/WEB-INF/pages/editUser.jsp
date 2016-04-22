@@ -14,7 +14,6 @@
 <body>
 <h1>Add users</h1>
 <div id="content">
-
     <form:form action="${pageContext.request.contextPath}/users/edit" commandName="userToEdit" method="post">
         <form:hidden path="id"></form:hidden>
         <form:label path="firstName">FirstName</form:label>
