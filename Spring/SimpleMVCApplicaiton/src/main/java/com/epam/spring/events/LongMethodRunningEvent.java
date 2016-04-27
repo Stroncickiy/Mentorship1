@@ -3,6 +3,7 @@ package com.epam.spring.events;
 import com.epam.spring.model.MethodExecutionRecord;
 import org.springframework.context.ApplicationEvent;
 
+@SuppressWarnings("serial")
 public class LongMethodRunningEvent extends ApplicationEvent {
 
     private MethodExecutionRecord executionRecord;
