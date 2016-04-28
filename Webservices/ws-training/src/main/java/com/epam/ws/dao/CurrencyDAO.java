@@ -1,6 +1,6 @@
-package com.epam.spring.dao;
+package com.epam.ws.dao;
 
-import com.epam.spring.model.Currency;
+import com.epam.ws.model.Currency;
 
 public interface CurrencyDAO{
 

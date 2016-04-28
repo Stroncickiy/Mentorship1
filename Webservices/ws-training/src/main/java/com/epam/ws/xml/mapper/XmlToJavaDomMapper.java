@@ -1,4 +1,4 @@
-package com.epam.spring.util;
+package com.epam.ws.xml.mapper;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -5,38 +5,26 @@ import java.util.List;
 
 import javax.persistence.Id;
 import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.epam.spring.app.enums.UserRole;
-import com.epam.spring.xml.adapter.LocalDateAdapter;
 
-@XmlRootElement
-@XmlAccessorType(XmlAccessType.FIELD)
 public class User {
 
-	@XmlAttribute
 	@Id
 	private Long id;
-	
+
 	private String firstName;
-	
+
 	@Size(min = 3, max = 10)
 	private String lastName;
-	
-	@XmlAttribute
+
 	private boolean processed;
-	
-	@XmlJavaTypeAdapter(value = LocalDateAdapter.class)
+
 	@DateTimeFormat(pattern = "MM/dd/yyyy")
 	private LocalDate birthday;
-	
-	@XmlAttribute
+
 	private boolean enabled;
 	private String password;
 	private List<UserRole> roles;

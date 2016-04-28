@@ -18,6 +18,7 @@
         <module>Core/synchronizers</module>
         <module>Spring/SimpleMVCApplicaiton</module>
         <module>Maven/ZipperMavenPlugin</module>
+		<module>Webservices/ws-traning</module>
 	</modules>
     <build>
         <pluginManagement>

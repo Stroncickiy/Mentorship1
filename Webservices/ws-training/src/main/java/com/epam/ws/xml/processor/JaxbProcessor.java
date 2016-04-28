@@ -1,4 +1,4 @@
-package com.epam.spring.util;
+package com.epam.ws.xml.processor;
 
 import java.io.File;
 import java.io.FileInputStream;

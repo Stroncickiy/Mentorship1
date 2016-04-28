@@ -1,17 +1,17 @@
 package com.epam.spring.service.impl;
 
-import com.epam.spring.dao.UserDAO;
-import com.epam.spring.model.User;
-import com.epam.spring.service.UserService;
+import java.time.LocalDate;
+import java.util.List;
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Random;
+import com.epam.spring.dao.UserDAO;
+import com.epam.spring.model.User;
+import com.epam.spring.service.UserService;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -20,8 +20,6 @@ public class UserServiceImpl implements UserService {
 	private final Random rand = new Random();
 
 	@Autowired
-	//@Qualifier("userDaoJdbc")
-	 @Qualifier("userDaoXml")
 	private UserDAO userDAO;
 
 	public User register(User user) {

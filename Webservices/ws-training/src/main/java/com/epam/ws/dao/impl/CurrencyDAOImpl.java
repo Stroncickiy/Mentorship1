@@ -1,4 +1,4 @@
-package com.epam.spring.dao.impl;
+package com.epam.ws.dao.impl;
 
 import java.io.File;
 import java.io.IOException;
@@ -6,26 +6,19 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Repository;
+import com.epam.ws.dao.CurrencyDAO;
+import com.epam.ws.model.Currency;
+import com.epam.ws.xml.parser.CurrencySAXParser;
 
-import com.epam.spring.dao.CurrencyDAO;
-import com.epam.spring.model.Currency;
-import com.epam.spring.parser.CurrencySAXParser;
-
-@Repository
 public class CurrencyDAOImpl implements CurrencyDAO {
 
+	private static final String CURRENCY_XML_FILE_NAME = "currencies.xml";
 	private CurrencySAXParser parser;
 	private File fileWithCurrencies;
 
-	@Autowired
-	private Environment environment;
-
 	@PostConstruct
 	public void init() throws IOException {
-		fileWithCurrencies = new File(environment.getProperty("currencies.xml.file.name"));
+		fileWithCurrencies = new File(CURRENCY_XML_FILE_NAME);
 		parser = new CurrencySAXParser(fileWithCurrencies);
 	}
 

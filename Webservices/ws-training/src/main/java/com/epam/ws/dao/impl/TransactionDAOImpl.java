@@ -1,10 +1,9 @@
-package com.epam.spring.dao.impl;
+package com.epam.ws.dao.impl;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -17,41 +16,38 @@ import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.stereotype.Repository;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.xml.sax.SAXException;
 
-import com.epam.spring.dao.CurrencyDAO;
-import com.epam.spring.dao.TransactionDAO;
-import com.epam.spring.model.Transaction;
-import com.epam.spring.model.Transaction.OperationType;
-import com.epam.spring.util.DOMProcessor;
-import com.epam.spring.util.XmlToJavaDomMapper;
-import com.epam.spring.util.XmlToJavaDomMapper.XmlToJavaMapper;
+import com.epam.ws.dao.CurrencyDAO;
+import com.epam.ws.dao.TransactionDAO;
+import com.epam.ws.model.Transaction;
+import com.epam.ws.model.Transaction.OperationType;
+import com.epam.ws.xml.mapper.XmlToJavaDomMapper;
+import com.epam.ws.xml.mapper.XmlToJavaDomMapper.XmlToJavaMapper;
+import com.epam.ws.xml.processor.DOMProcessor;
 
 
-@Repository
+
 public class TransactionDAOImpl implements TransactionDAO {
 
+	private static final String TRANSACTIONS_XML_FILE_NAME = "transactions.xml";
 	private DocumentBuilderFactory dbFactory;
 	private DocumentBuilder dBuilder;
 	private File transactionsXmlStorageFile;
 	private Document transactionsXmlStorageDocument;
 	private XmlToJavaDomMapper<Transaction> xmlToJavaDomMapper;
-	@Autowired
+
 	private CurrencyDAO currencyDao;
-	@Autowired
-	private Environment environment;
+
+
 	
-	@PostConstruct
-	private void init() throws ParserConfigurationException, SAXException, IOException,
+	public void init() throws ParserConfigurationException, SAXException, IOException,
 			TransformerFactoryConfigurationError, TransformerException {
 		dbFactory = DocumentBuilderFactory.newInstance();
 		dBuilder = dbFactory.newDocumentBuilder();
-		transactionsXmlStorageFile = new File(environment.getProperty("transactions.xml.file.name"));
+		transactionsXmlStorageFile = new File(TRANSACTIONS_XML_FILE_NAME);
 		if (transactionsXmlStorageFile.exists()) {
 			updateDocumentFromFile();
 		} else {

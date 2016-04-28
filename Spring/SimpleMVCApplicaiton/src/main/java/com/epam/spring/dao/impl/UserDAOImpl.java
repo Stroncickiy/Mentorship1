@@ -20,7 +20,7 @@ import com.epam.spring.dao.UserDAO;
 import com.epam.spring.model.User;
 import com.google.common.base.Splitter;
 
-@Repository("userDaoJdbc")
+@Repository
 public class UserDAOImpl implements UserDAO {
 
 	@Autowired

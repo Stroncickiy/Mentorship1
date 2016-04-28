@@ -1,4 +1,4 @@
-package com.epam.spring.model;
+package com.epam.ws.model;
 
 public class Transaction {
 

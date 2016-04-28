@@ -1,4 +1,4 @@
-package com.epam.spring.parser;
+package com.epam.ws.xml.parser;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,7 +16,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
-import com.epam.spring.model.Currency;
+import com.epam.ws.model.Currency;
 
 public class CurrencySAXParser {
 
