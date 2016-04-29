@@ -1,10 +1,7 @@
 package com.epam.ws.dao.impl;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
-
-import javax.annotation.PostConstruct;
 
 import com.epam.ws.dao.CurrencyDAO;
 import com.epam.ws.model.Currency;
@@ -15,19 +12,20 @@ public class CurrencyDAOImpl implements CurrencyDAO {
 	private static final String CURRENCY_XML_FILE_NAME = "currencies.xml";
 	private CurrencySAXParser parser;
 	private File fileWithCurrencies;
+	private List<Currency> currencies;
 
-	@PostConstruct
-	public void init() throws IOException {
+	public CurrencyDAOImpl() {
 		fileWithCurrencies = new File(CURRENCY_XML_FILE_NAME);
 		parser = new CurrencySAXParser(fileWithCurrencies);
+		currencies = parser.getAll();
 	}
 
 	public Currency getByAlias(String alias) {
-		return getAll().stream().filter(c -> c.getAlias().equalsIgnoreCase(alias)).findFirst().get();
+		return currencies.stream().filter(c -> c.getAlias().equalsIgnoreCase(alias)).findFirst().get();
 	}
 
 	public List<Currency> getAll() {
-		return parser.getAll();
+		return currencies;
 	}
 
 }

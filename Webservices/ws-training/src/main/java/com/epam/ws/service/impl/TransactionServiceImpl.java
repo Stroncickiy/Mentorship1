@@ -3,6 +3,7 @@ package com.epam.ws.service.impl;
 import java.util.List;
 
 import com.epam.ws.dao.TransactionDAO;
+import com.epam.ws.dao.holder.DAOFactory;
 import com.epam.ws.model.Transaction;
 import com.epam.ws.service.TransactionService;
 
@@ -10,8 +11,12 @@ public class TransactionServiceImpl implements TransactionService {
 
 	private TransactionDAO transactionDAO;
 
+	public TransactionServiceImpl() {
+		transactionDAO = DAOFactory.getInstance().getTransactionDAO();
+	}
+
 	@Override
-	public Transaction registerTransaction(Transaction transaction) {
+	synchronized public Transaction registerTransaction(Transaction transaction) {
 		return transactionDAO.add(transaction);
 	}
 

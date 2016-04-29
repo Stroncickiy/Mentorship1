@@ -18,14 +18,12 @@ public class DOMProcessor {
 
 	public ElementBuilder newElement(String tagName) {
 		Element newElement = document.createElement(tagName);
-		return new ElementBuilder(newElement);
+		return new ElementBuilder(newElement, document.getDocumentElement(), null);
 	}
 
 	public ElementFinder findChildByCriteria(Element father) {
 		return new ElementFinder(father);
 	}
-	
-	
 
 	public static interface NodeCriteria {
 		boolean accept(Element element);
@@ -39,8 +37,6 @@ public class DOMProcessor {
 			this.listChildNodes = father.getChildNodes();
 
 		}
-		
-		
 
 		public NodeCriteriaBuilder defineCriterias() {
 			return new NodeCriteriaBuilder();
@@ -93,53 +89,68 @@ public class DOMProcessor {
 
 	public class ElementBuilder {
 
-		private Element element;
+		private Element elementToBuild;
+		private Element father;
+		private ElementBuilder outerBuilder;
 
-		private ElementBuilder(Element element) {
-			this.element = element;
+		private ElementBuilder(Element element, Element father, ElementBuilder outerBuilder) {
+			if(outerBuilder==null){
+				this.outerBuilder = this;
+			}else{				
+				this.outerBuilder = outerBuilder;
+			}
+			this.elementToBuild = element;
+			this.father = father;
+	
 		}
 
 		public ElementBuilder addAttribute(String name, Object value) {
-			element.setAttribute(name, String.valueOf(value));
+			elementToBuild.setAttribute(name, String.valueOf(value));
 			return this;
 		}
 
 		public ElementBuilder setValue(Object value) {
-			element.setNodeValue(String.valueOf(value));
+			elementToBuild.setTextContent(String.valueOf(value));
 			return this;
 		}
 
 		public Element build() {
-			return element;
+			return elementToBuild;
 		}
 
 		public DOMSelector insertInto() {
-			return new DOMSelector();
+			return new DOMSelector(father);
 		}
 
 		public ElementBuilder addChild(String childName) {
 			Element child = document.createElement(childName);
-			return new ElementBuilder(child);
+			ElementBuilder elementBuilder = new ElementBuilder(child, elementToBuild, outerBuilder);
+			return elementBuilder;
 		}
 
 		public class DOMSelector {
 
-			private Element currentElement;
+			private Element targetElementToInsertInto;
 			private Element ellementToInsert;
 
-			public ElementBuilder outerElement() {
-				currentElement = element;
-				currentElement.appendChild(ellementToInsert);
-				return ElementBuilder.this;
+			public DOMSelector(Element parent) {
+				this.targetElementToInsertInto = parent;
+			}
 
+			public ElementBuilder outerElement() {
+				ellementToInsert = ElementBuilder.this.elementToBuild;
+				targetElementToInsertInto.appendChild(ellementToInsert);
+				return ElementBuilder.this.outerBuilder;
 			}
 
 			public DOMSelector moveInsideInto(String tagNameToMoveCursor) {
-				currentElement = (Element) currentElement.getElementsByTagName(tagNameToMoveCursor).item(0);
+				targetElementToInsertInto = (Element) targetElementToInsertInto
+						.getElementsByTagName(tagNameToMoveCursor).item(0);
 				return this;
 			}
 
 		}
+
 	}
 
 }

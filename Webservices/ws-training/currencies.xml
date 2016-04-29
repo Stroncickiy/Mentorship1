@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<currencies>
+	<currency id="1" alias="USD">
+		<ratioToMainCurrency>1</ratioToMainCurrency>
+		<isMainCurrency>true</isMainCurrency>
+	</currency>
+	<currency id="2" alias="EUR">
+		<ratioToMainCurrency>1.2</ratioToMainCurrency>
+		<isMainCurrency>false</isMainCurrency>
+	</currency>
+	<currency id="3" alias="UAH">
+		<ratioToMainCurrency>25.5</ratioToMainCurrency>
+		<isMainCurrency>false</isMainCurrency>
+	</currency>
+	<currency id="4" alias="GBP">
+		<ratioToMainCurrency>30</ratioToMainCurrency>
+		<isMainCurrency>false</isMainCurrency>
+	</currency>
+</currencies>

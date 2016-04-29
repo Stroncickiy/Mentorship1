@@ -38,4 +38,11 @@ public class Currency {
 		this.id = id;
 	}
 
+	@Override
+	public String toString() {
+		return "Currency [id=" + id + ", alias=" + alias + ", ratioToMainCurrency=" + ratioToMainCurrency
+				+ ", isMainCurrency=" + isMainCurrency + "]";
+	}
+
+	
 }

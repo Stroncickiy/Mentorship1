@@ -1,10 +1,10 @@
 package com.epam.ws.dao.impl;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
 
-import javax.annotation.PostConstruct;
 import javax.xml.bind.JAXBException;
 
 import com.epam.ws.dao.UserDAO;
@@ -22,14 +22,12 @@ public class UserDaoXmlImpl implements UserDAO {
 
 	private JaxbProcessor<UsersList> jaxbProcessor;
 
-	@PostConstruct
-	private void init() throws JAXBException, IOException {
+	public  UserDaoXmlImpl() throws FileNotFoundException, JAXBException, IOException {
 		usersXmlFile = new File(USERS_FILE_NAME);
 		jaxbProcessor = new JaxbProcessor<UsersList>()
 				.forClass(UsersList.class)
 				.from(usersXmlFile)
 				.withInitialData(new UsersList());
-
 	}
 
 	@Override

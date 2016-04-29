@@ -9,7 +9,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlAccessorType(XmlAccessType.FIELD)
 public class User {
 
-	@XmlAttribute
+	@XmlAttribute(required=false)
 	private Long id;
 	private String firstName;
 	private String lastName;
@@ -19,6 +19,7 @@ public class User {
 	public Long getId() {
 		return id;
 	}
+
 
 	public void setId(Long id) {
 		this.id = id;

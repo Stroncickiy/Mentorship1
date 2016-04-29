@@ -74,8 +74,9 @@ public class CurrencySAXParser {
 				}
 
 				public void endElement(String uri, String localName, String qName) throws SAXException {
-					curencyList.add(currentCurrency);
-
+					if (qName.equalsIgnoreCase("Currency")) {
+						curencyList.add(currentCurrency);
+					}
 				}
 
 				public void characters(char ch[], int start, int length) throws SAXException {

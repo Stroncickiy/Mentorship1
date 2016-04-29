@@ -12,7 +12,6 @@ import javax.xml.transform.Source;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 
@@ -22,6 +21,7 @@ import org.xml.sax.SAXException;
 
 import com.epam.ws.dao.CurrencyDAO;
 import com.epam.ws.dao.TransactionDAO;
+import com.epam.ws.dao.holder.DAOFactory;
 import com.epam.ws.model.Transaction;
 import com.epam.ws.model.Transaction.OperationType;
 import com.epam.ws.xml.mapper.XmlToJavaDomMapper;
@@ -41,39 +41,38 @@ public class TransactionDAOImpl implements TransactionDAO {
 
 	private CurrencyDAO currencyDao;
 
-
-	
-	public void init() throws ParserConfigurationException, SAXException, IOException,
-			TransformerFactoryConfigurationError, TransformerException {
-		dbFactory = DocumentBuilderFactory.newInstance();
-		dBuilder = dbFactory.newDocumentBuilder();
-		transactionsXmlStorageFile = new File(TRANSACTIONS_XML_FILE_NAME);
-		if (transactionsXmlStorageFile.exists()) {
-			updateDocumentFromFile();
-		} else {
-			transactionsXmlStorageFile.createNewFile();
-			transactionsXmlStorageDocument = dBuilder.newDocument();
-			Element transactionsElement = transactionsXmlStorageDocument.createElement("transactions");
-			transactionsXmlStorageDocument.appendChild(transactionsElement);
-			saveDocumentToFile(transactionsXmlStorageDocument);
-		}
-		
-		xmlToJavaDomMapper = new XmlToJavaDomMapper<>(new XmlToJavaMapper<Transaction>() {
-
-			@Override
-			public Transaction convert(Element element) {
-				Transaction transaction = new Transaction();
-				transaction.setAmmount(Double.valueOf(element.getElementsByTagName("ammount").item(0).getNodeValue()));
-				transaction.setAmountInDefaultCurrency(Double.valueOf(element.getElementsByTagName("ammountInDefaultCurrency").item(0).getNodeValue()));
-				transaction.setConvertedToDefaultCurrency(Boolean.valueOf(element.getElementsByTagName("isConverted").item(0).getNodeValue()));
-				transaction.setCurrency(currencyDao.getByAlias(element.getElementsByTagName("currency").item(0).getNodeValue()));
-				transaction.setId(Long.valueOf(element.getAttribute("id")));
-				transaction.setUserId(Long.valueOf(element.getAttribute("userId")));
-				transaction.setOperationType(OperationType.valueOf(element.getAttribute("operation")));
-				return transaction;
-			}
-		});
+	public TransactionDAOImpl() throws ParserConfigurationException, IOException, TransformerException{
+	currencyDao = DAOFactory.getInstance().getCurrencyDAO();
+	dbFactory = DocumentBuilderFactory.newInstance();
+	dBuilder = dbFactory.newDocumentBuilder();
+	transactionsXmlStorageFile = new File(TRANSACTIONS_XML_FILE_NAME);
+	if (transactionsXmlStorageFile.exists()) {
+		updateDocumentFromFile();
+	} else {
+		transactionsXmlStorageFile.createNewFile();
+		transactionsXmlStorageDocument = dBuilder.newDocument();
+		Element transactionsElement = transactionsXmlStorageDocument.createElement("transactions");
+		transactionsXmlStorageDocument.appendChild(transactionsElement);
+		saveDocumentToFile(transactionsXmlStorageDocument);
 	}
+	
+	xmlToJavaDomMapper = new XmlToJavaDomMapper<>(new XmlToJavaMapper<Transaction>() {
+
+		@Override
+		public Transaction convert(Element element) {
+			Transaction transaction = new Transaction();
+			transaction.setAmmount(Double.valueOf(element.getElementsByTagName("ammount").item(0).getNodeValue()));
+			transaction.setAmountInDefaultCurrency(Double.valueOf(element.getElementsByTagName("ammountInDefaultCurrency").item(0).getNodeValue()));
+			transaction.setConvertedToDefaultCurrency(Boolean.valueOf(element.getElementsByTagName("isConverted").item(0).getNodeValue()));
+			transaction.setCurrency(currencyDao.getByAlias(element.getElementsByTagName("currency").item(0).getNodeValue()));
+			transaction.setId(Long.valueOf(element.getAttribute("id")));
+			transaction.setUserId(Long.valueOf(element.getAttribute("userId")));
+			transaction.setOperationType(OperationType.valueOf(element.getAttribute("operation")));
+			return transaction;
+		}
+	});
+	}
+	
 
 	private void updateDocumentFromFile() {
 		try {
@@ -105,8 +104,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 		
 		int itemsInFile = root.getElementsByTagName("transaction").getLength();
 		transaction.setId((long) ++itemsInFile);
-		
-		Element newTransactionNode = new DOMProcessor(transactionsXmlStorageDocument)
+		Element newTransactionNode =new DOMProcessor(transactionsXmlStorageDocument)
 		.newElement("transaction")
 		.addAttribute("id", transaction.getId())
 		.addAttribute("userId", transaction.getUserId())
@@ -127,8 +125,8 @@ public class TransactionDAOImpl implements TransactionDAO {
 			.setValue(transaction.getAmountInDefaultCurrency())
 			.insertInto()
 			.outerElement()
-		.build();	
-
+		.build();
+			
 		root.appendChild(newTransactionNode);
 		commitData();
 		return transaction;
@@ -138,28 +136,28 @@ public class TransactionDAOImpl implements TransactionDAO {
 	public void update(Transaction transaction) {
 		Element root = transactionsXmlStorageDocument.getDocumentElement();
 				
-		Element newTransactionNode = new DOMProcessor(transactionsXmlStorageDocument)
-		.newElement("transaction")
-		.addAttribute("id", transaction.getId())
-		.addAttribute("userId", transaction.getUserId())
-		.addAttribute("operation", transaction.getOperationType().name())
-		.addChild("currency")
-			.setValue(transaction.getCurrency().getAlias())
-			.insertInto()
-			.outerElement()
-		.addChild("isConverted")
-			.setValue(transaction.isConvertedToDefaultCurrency())
-			.insertInto()
-			.outerElement()
-		.addChild("ammount")	
-			.setValue(transaction.getAmmount())
-			.insertInto()
-			.outerElement()
-		.addChild("ammountInDefaultCurrency")
-			.setValue(transaction.getAmountInDefaultCurrency())
-			.insertInto()
-			.outerElement()
-		.build();	
+		Element newTransactionNode =new DOMProcessor(transactionsXmlStorageDocument)
+				.newElement("transaction")
+				.addAttribute("id", transaction.getId())
+				.addAttribute("userId", transaction.getUserId())
+				.addAttribute("operation", transaction.getOperationType().name())
+				.addChild("currency")
+					.setValue(transaction.getCurrency().getAlias())
+					.insertInto()
+					.outerElement()
+				.addChild("isConverted")
+					.setValue(transaction.isConvertedToDefaultCurrency())
+					.insertInto()
+					.outerElement()
+				.addChild("ammount")	
+					.setValue(transaction.getAmmount())
+					.insertInto()
+					.outerElement()
+				.addChild("ammountInDefaultCurrency")
+					.setValue(transaction.getAmountInDefaultCurrency())
+					.insertInto()
+					.outerElement()
+				.build();
 
 		
 		Element nodeOfCurrentTransaction = new DOMProcessor(transactionsXmlStorageDocument)
