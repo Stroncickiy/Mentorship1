@@ -15,19 +15,18 @@ import com.epam.ws.soap.services.BankingWebService;
 import com.epam.ws.transaction.TransactionBuilder;
 
 @WebService
+@HandlerChain(file="handler-chain.xml")
 public class BankingWebServiceImpl  implements BankingWebService{
 
 	private UserService userService = ServiceFactory.getInstance().getUserService();
 	private CurrencyService currencyService = ServiceFactory.getInstance().getCurrencyService();
 
-	@HandlerChain(file="handler-chain.xml")
 	@WebMethod
 	public 	@WebResult(name="success") boolean deposit(@WebParam(name="ammount")Double ammount, @WebParam(name="currency")String currency, @WebParam(name="userId") Long userId,@WebParam(header=true,name="CC") boolean needConvert) {
 		return performTransaction(ammount, currency, userId, OperationType.DEPOSIT,needConvert);
 	}
 
 	@WebMethod
-	@HandlerChain(file="handler-chain.xml")
 	public 	@WebResult(name="success") boolean withdraw(@WebParam(name="ammount")Double ammount, @WebParam(name="currency")String currency, @WebParam(name="userId") Long userId,@WebParam(header=true,name="CC") boolean needConvert) {
 		return performTransaction(ammount, currency, userId, OperationType.WITHDRAWAL,needConvert);
 

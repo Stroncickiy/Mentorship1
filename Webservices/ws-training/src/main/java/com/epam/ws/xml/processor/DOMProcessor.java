@@ -34,6 +34,7 @@ public class DOMProcessor {
 		private List<NodeCriteria> criterias;
 
 		public ElementFinder(Element father) {
+			criterias = new ArrayList<>();
 			this.listChildNodes = father.getChildNodes();
 
 		}
@@ -56,6 +57,18 @@ public class DOMProcessor {
 			public ElementFinder enought() {
 				return ElementFinder.this;
 			}
+
+			public NodeCriteriaBuilder tagName(String tagname) {
+				criterias.add(new NodeCriteria() {
+					
+					@Override
+					public boolean accept(Element element) {
+						return element.getTagName().equals(tagname);
+					}
+				});
+				return this;
+			
+			}
 		}
 
 		public List<Element> getResultList() {
@@ -69,7 +82,8 @@ public class DOMProcessor {
 		private List<Element> filter() {
 			List<Element> resultList = new ArrayList<>();
 			for (int i = 0; i < listChildNodes.getLength(); i++) {
-				if (examine(listChildNodes.item(i))) {
+				Node item = listChildNodes.item(i);
+				if (item instanceof Element && examine(item)) {
 					resultList.add((Element) listChildNodes.item(i));
 				}
 			}

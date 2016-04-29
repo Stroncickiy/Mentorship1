@@ -6,7 +6,6 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
-import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPHeader;
@@ -20,6 +19,7 @@ import org.w3c.dom.Element;
 import com.epam.ws.service.CurrencyService;
 import com.epam.ws.service.holder.ServiceFactory;
 import com.epam.ws.util.CurrencyConversionUtil;
+import com.epam.ws.xml.processor.DOMProcessor;
 
 public class SoapMessagesHandler implements SOAPHandler<SOAPMessageContext> {
 
@@ -27,10 +27,9 @@ public class SoapMessagesHandler implements SOAPHandler<SOAPMessageContext> {
 
 	@Override
 	public boolean handleMessage(SOAPMessageContext context) {
-
 		System.out.println("Server : handleMessage()......");
 
-		Boolean isRequest = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
+		Boolean isResponse = (Boolean) context.get(MessageContext.MESSAGE_OUTBOUND_PROPERTY);
 
 		// for response message only, true for outbound messages, false for
 		// inbound
@@ -39,13 +38,14 @@ public class SoapMessagesHandler implements SOAPHandler<SOAPMessageContext> {
 			SOAPMessage soapMsg = context.getMessage();
 			SOAPEnvelope soapEnv = soapMsg.getSOAPPart().getEnvelope();
 			SOAPHeader soapHeader = soapEnv.getHeader();
-			SOAPElement parentElement = soapMsg.getSOAPBody().getParentElement();
-			Element ammountElement = (Element) parentElement.getChildElements(new QName("ammount")).next();
-			Element currencyElement = (Element) parentElement.getChildElements(new QName("currency")).next();
-			Element userIdElement = (Element) parentElement.getChildElements(new QName("userId")).next();
+			DOMProcessor domProcessor = new DOMProcessor(soapEnv.getOwnerDocument());
+			Element parentElement = (Element) soapMsg.getSOAPBody().getChildNodes().item(1);;
+			Element ammountElement = domProcessor.findChildByCriteria(parentElement).defineCriterias().tagName("ammount").enought().getSingleResult();
+			Element currencyElement = domProcessor.findChildByCriteria(parentElement).defineCriterias().tagName("currency").enought().getSingleResult();
+			Element userIdElement = domProcessor.findChildByCriteria(parentElement).defineCriterias().tagName("userId").enought().getSingleResult();
 
-			if (!isRequest) {
-				Element needConvertElement =(Element) soapHeader.getChildElements(new QName("CC")).next();
+			if (!isResponse) {
+				Element needConvertElement =(Element) domProcessor.findChildByCriteria(soapHeader).defineCriterias().tagName("CC").enought().getSingleResult();
 				if (Boolean.valueOf(needConvertElement.getTextContent())) {
 					Double previousAmount = Double.parseDouble(ammountElement.getTextContent());
 					Double convertedAmmount = CurrencyConversionUtil.convertToDefault(
