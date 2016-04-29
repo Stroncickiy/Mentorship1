@@ -4,11 +4,12 @@ import com.epam.ws.model.Currency;
 import com.epam.ws.model.Transaction;
 import com.epam.ws.service.TransactionService;
 import com.epam.ws.service.holder.ServiceFactory;
+import com.epam.ws.util.CurrencyConversionUtil;
 
 public class TransactionBuilder {
 
-	private static TransactionService  transactionService = ServiceFactory.getInstance().getTransactionService();
-	
+	private static TransactionService transactionService = ServiceFactory.getInstance().getTransactionService();
+
 	private Transaction transaction = new Transaction();
 
 	public TransactionBuilder withType(Transaction.OperationType operationType) {
@@ -37,7 +38,12 @@ public class TransactionBuilder {
 	}
 
 	public boolean perform() {
-		return transactionService.registerTransaction(transaction).getId()!=null;
+		if (transaction.isConvertedToDefaultCurrency()) {
+			transaction.setAmountInDefaultCurrency(transaction.getAmmount());
+			transaction.setAmmount(CurrencyConversionUtil.convertFromDefaultTo(transaction.getCurrency(),
+					transaction.getAmountInDefaultCurrency()));
+		}
+		return transactionService.registerTransaction(transaction).getId() != null;
 
 	}
 

@@ -9,4 +9,8 @@ public class CurrencyConversionUtil {
 
 	}
 
+	public static Double convertFromDefaultTo(Currency to, Double ammout) {
+		return ammout / to.getRatioToMainCurrency();
+	}
+
 }
