@@ -1,5 +1,9 @@
+
 package com.epam.ws.model;
 
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class Transaction {
 
 	public enum OperationType {

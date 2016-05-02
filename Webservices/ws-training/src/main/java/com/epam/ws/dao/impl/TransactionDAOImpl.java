@@ -33,7 +33,6 @@ import com.epam.ws.xml.processor.DOMProcessor;
 public class TransactionDAOImpl implements TransactionDAO {
 
 	private static final String TRANSACTIONS_XML_FILE_NAME = "transactions.xml";
-	private DocumentBuilderFactory dbFactory;
 	private DocumentBuilder dBuilder;
 	private File transactionsXmlStorageFile;
 	private Document transactionsXmlStorageDocument;
@@ -43,8 +42,7 @@ public class TransactionDAOImpl implements TransactionDAO {
 
 	public TransactionDAOImpl() throws ParserConfigurationException, IOException, TransformerException{
 	currencyDao = DAOFactory.getInstance().getCurrencyDAO();
-	dbFactory = DocumentBuilderFactory.newInstance();
-	dBuilder = dbFactory.newDocumentBuilder();
+	dBuilder = DocumentBuilderFactory.newInstance().newDocumentBuilder();
 	transactionsXmlStorageFile = new File(TRANSACTIONS_XML_FILE_NAME);
 	if (transactionsXmlStorageFile.exists()) {
 		updateDocumentFromFile();
@@ -61,10 +59,15 @@ public class TransactionDAOImpl implements TransactionDAO {
 		@Override
 		public Transaction convert(Element element) {
 			Transaction transaction = new Transaction();
-			transaction.setAmmount(Double.valueOf(element.getElementsByTagName("ammount").item(0).getNodeValue()));
-			transaction.setAmountInDefaultCurrency(Double.valueOf(element.getElementsByTagName("ammountInDefaultCurrency").item(0).getNodeValue()));
-			transaction.setConvertedToDefaultCurrency(Boolean.valueOf(element.getElementsByTagName("isConverted").item(0).getNodeValue()));
-			transaction.setCurrency(currencyDao.getByAlias(element.getElementsByTagName("currency").item(0).getNodeValue()));
+			transaction.setAmmount(Double.valueOf(element.getElementsByTagName("ammount").item(0).getTextContent()));
+			String ammountInDefaultCurrency = element.getElementsByTagName("ammountInDefaultCurrency").item(0).getTextContent();
+			if(!ammountInDefaultCurrency.equals("null")){				
+				transaction.setAmountInDefaultCurrency(Double.valueOf(ammountInDefaultCurrency));
+			}else{
+				transaction.setAmountInDefaultCurrency(0D);
+			}
+			transaction.setConvertedToDefaultCurrency(Boolean.valueOf(element.getElementsByTagName("isConverted").item(0).getTextContent()));
+			transaction.setCurrency(currencyDao.getByAlias(element.getElementsByTagName("currency").item(0).getTextContent()));
 			transaction.setId(Long.valueOf(element.getAttribute("id")));
 			transaction.setUserId(Long.valueOf(element.getAttribute("userId")));
 			transaction.setOperationType(OperationType.valueOf(element.getAttribute("operation")));

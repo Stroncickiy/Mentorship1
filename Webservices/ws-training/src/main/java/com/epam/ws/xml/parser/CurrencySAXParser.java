@@ -38,7 +38,7 @@ public class CurrencySAXParser {
 
 	private class CurrencyHandler extends DefaultHandler {
 		protected List<Currency> curencyList;
-
+		
 		public CurrencyHandler(List<Currency> curencyList) {
 			this.curencyList = curencyList;
 		}

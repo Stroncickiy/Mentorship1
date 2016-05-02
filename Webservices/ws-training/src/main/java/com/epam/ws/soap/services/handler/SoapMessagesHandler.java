@@ -1,8 +1,5 @@
 package com.epam.ws.soap.services.handler;
 
-import java.nio.charset.Charset;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Set;
 
 import javax.xml.namespace.QName;
@@ -23,7 +20,6 @@ import com.epam.ws.xml.processor.DOMProcessor;
 
 public class SoapMessagesHandler implements SOAPHandler<SOAPMessageContext> {
 
-	private static final String NAMESPACE = "http://impl.services.soap.ws.epam.com/";
 	private CurrencyService currencyService = ServiceFactory.getInstance().getCurrencyService();
 
 	@Override
@@ -40,26 +36,26 @@ public class SoapMessagesHandler implements SOAPHandler<SOAPMessageContext> {
 			SOAPEnvelope soapEnv = soapMsg.getSOAPPart().getEnvelope();
 			SOAPHeader soapHeader = soapEnv.getHeader();
 			DOMProcessor domProcessor = new DOMProcessor(soapEnv.getOwnerDocument());
-			Element parentElement = (Element) soapMsg.getSOAPBody().getChildNodes().item(1);;
-		
+			Element parentElement = (Element) soapMsg.getSOAPBody().getChildNodes().item(1);
+			;
 			if (!isResponse) {
-				Element ammountElement = domProcessor.findChildByCriteria(parentElement).defineCriterias().tagName("ammount").enought().getSingleResult();
-				Element currencyElement = domProcessor.findChildByCriteria(parentElement).defineCriterias().tagName("currency").enought().getSingleResult();
-				Element userIdElement = domProcessor.findChildByCriteria(parentElement).defineCriterias().tagName("userId").enought().getSingleResult();
-				Element needConvertElement = (Element) soapHeader.getElementsByTagNameNS(soapEnv.getNamespaceURI("impl"), "CC").item(0);
-				if (Boolean.valueOf(needConvertElement.getTextContent())) {
-					Double previousAmount = Double.parseDouble(ammountElement.getTextContent());
-					Double convertedAmmount = CurrencyConversionUtil.convertToDefault(
-							currencyService.getByAlias(currencyElement.getTextContent()), previousAmount);
-					ammountElement.setTextContent(String.valueOf(convertedAmmount));
+				if (parentElement.getTagName().equals("deposit") || parentElement.getTagName().equals("withdraw")) {
+					Element ammountElement = domProcessor.findChildByCriteria(parentElement).defineCriterias()
+							.tagName("ammount").enought().getSingleResult();
+					Element currencyElement = domProcessor.findChildByCriteria(parentElement).defineCriterias()
+							.tagName("currency").enought().getSingleResult();
+					Element needConvertElement = (Element) soapHeader
+							.getElementsByTagNameNS(soapEnv.getNamespaceURI("impl"), "CC").item(0);
+					if (Boolean.valueOf(needConvertElement.getTextContent())) {
+						Double previousAmount = Double.parseDouble(ammountElement.getTextContent());
+						Double convertedAmmount = CurrencyConversionUtil.convertToDefault(
+								currencyService.getByAlias(currencyElement.getTextContent()), previousAmount);
+						ammountElement.setTextContent(String.valueOf(convertedAmmount));
+					}
 				}
-			} else {
-				String stringToHash = "?";
-				byte[] digest = MessageDigest.getInstance("MD5").digest(stringToHash.getBytes(Charset.forName("UTF-8")));
-				soapHeader.addChildElement("hash","impl",NAMESPACE).setTextContent(new String(digest,Charset.forName("UTF-8")));
 			}
 
-		} catch (SOAPException | NoSuchAlgorithmException e) {
+		} catch (SOAPException e) {
 			System.err.println(e);
 		}
 
