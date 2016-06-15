@@ -1,14 +1,38 @@
 package com.epam.orm.model;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class User {
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+
+@Entity
+public class User implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6501726478909925311L;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String name;
 	private String surname;
 	private String email;
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable(name = "user_permissions", joinColumns = { @JoinColumn(name = "user_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "permission_id") })
 	private List<Permissions> permissions;
+	@OneToMany
 	private List<Car> cars;
+	@OneToOne(optional=true)
 	private AuthorizationToken authorizationToken;
 
 	public long getId() {

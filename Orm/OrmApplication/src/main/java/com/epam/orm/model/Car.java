@@ -1,10 +1,22 @@
 package com.epam.orm.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+@Entity
 public class Car {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	private String model;
 	private String type;
+	@ManyToOne
 	private Manufacturer manufacturer;
+	@ManyToOne
+	private User owner;
 
 	public long getId() {
 		return id;
@@ -36,6 +48,14 @@ public class Car {
 
 	public void setManufacturer(Manufacturer manufacturer) {
 		this.manufacturer = manufacturer;
+	}
+
+	public User getOwner() {
+		return owner;
+	}
+
+	public void setOwner(User owner) {
+		this.owner = owner;
 	}
 
 }
