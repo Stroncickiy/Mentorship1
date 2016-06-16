@@ -6,7 +6,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
-import org.hibernate.SessionFactory;
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.epam.orm.dao.GenericDao;
@@ -46,10 +46,11 @@ public abstract class GenericDaoImpl<T, I extends Serializable> implements Gener
 		getEntityManager().persist(obj);
 	}
 
+	@SuppressWarnings("unchecked")
 	@Transactional
 	@Override
 	public List<T> getAll() {
-		return ((SessionFactory) getEntityManager().getDelegate()).getCurrentSession().createCriteria(getType()).list();
+		return ((Session) getEntityManager().getDelegate()).createCriteria(getType()).list();
 	}
 
 	@Transactional

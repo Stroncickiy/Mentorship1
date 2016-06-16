@@ -1,5 +1,8 @@
 package com.epam.orm.configuration;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.persistence.EntityManagerFactory;
 import javax.sql.DataSource;
 
@@ -51,7 +54,10 @@ public class WebConfig extends WebMvcConfigurerAdapter {
 	@Bean(name = "entityManagerFactory")
 	public LocalContainerEntityManagerFactoryBean entityManagerFactory(EntityManagerFactoryBuilder builder,
 			@Qualifier("dataSource") DataSource dataSource) {
-		return builder.dataSource(dataSource).packages("com.epam.orm.model").persistenceUnit("pu").build();
+		Map<String, String> properties = new HashMap<>();
+		properties.put("hibernate.hbm2ddl.auto", "create");
+		return builder.dataSource(dataSource).packages("com.epam.orm.model").properties(properties)
+				.persistenceUnit("PersistanceUnit").build();
 	}
 
 	@Primary

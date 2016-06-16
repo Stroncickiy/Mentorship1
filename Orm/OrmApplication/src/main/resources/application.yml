@@ -2,17 +2,21 @@ server:
   port: 8080
 spring:
   datasource:
-    url: jdbc:hsqldb:mem:mydb
+    url: jdbc:h2:mem:dataSource
     test-on-borrow: true
     test-while-idle: true
     validation-query: select 1;
     maxActive: 1
+  h2:
+  console:
+     enabled: true 
+     path: /h2-console 
   jpa:
     show-sql: true
     generate-ddl: false
     properties:
       hibernate:
-        dialect: org.hibernate.dialect.HSQLDialect
+        dialect: org.hibernate.dialect.H2Dialect
         ddl-auto: create
         hbm2ddl:
           import_files:

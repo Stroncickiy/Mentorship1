@@ -1,5 +1,7 @@
 package com.epam.orm.rest;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -18,6 +20,17 @@ public class UserController {
 	@RequestMapping(method = RequestMethod.POST)
 	public void addUser(User newUser) {
 		userService.save(newUser);
+	}
+
+	@RequestMapping(method = RequestMethod.GET)
+	public List<User> getAllUsers() {
+		return userService.getAll();
+	}
+
+	@RequestMapping(method = RequestMethod.PUT)
+	public void bulkUpdateUsers(List<User> usersToBeUpdated) {
+		userService.bulkUpdate(usersToBeUpdated);
+
 	}
 
 }

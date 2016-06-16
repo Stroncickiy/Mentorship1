@@ -3,6 +3,7 @@ package com.epam.orm.model;
 import java.io.Serializable;
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,8 +14,10 @@ import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Table;
 
 @Entity
+@Table(name = "user")
 public class User implements Serializable {
 	/**
 	 * 
@@ -32,7 +35,7 @@ public class User implements Serializable {
 	private List<Permissions> permissions;
 	@OneToMany
 	private List<Car> cars;
-	@OneToOne(optional=true)
+	@OneToOne(optional = true, cascade = CascadeType.REMOVE)
 	private AuthorizationToken authorizationToken;
 
 	public long getId() {

@@ -5,16 +5,22 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
+@Table(name = "car")
 public class Car {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonIgnore
 	private long id;
 	private String model;
 	private String type;
 	@ManyToOne
 	private Manufacturer manufacturer;
+	@JsonIgnore
 	@ManyToOne
 	private User owner;
 

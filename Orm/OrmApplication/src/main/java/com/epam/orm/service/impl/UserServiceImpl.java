@@ -3,20 +3,23 @@ package com.epam.orm.service.impl;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.epam.orm.dao.AuthTokenDAO;
+import com.epam.orm.dao.GenericDao;
 import com.epam.orm.dao.UserDAO;
 import com.epam.orm.model.AuthorizationToken;
 import com.epam.orm.model.User;
 import com.epam.orm.service.UserService;
 
 @Service
-public class UserServiceImpl implements UserService {
+public class UserServiceImpl extends GenericServiceImpl<User, Long> implements UserService {
 
 	@Autowired
-	private UserDAO userDAO;
+	private UserDAO dao;
 
 	@Autowired
 	private AuthTokenDAO authTokenDAO;
@@ -24,9 +27,9 @@ public class UserServiceImpl implements UserService {
 	public void save(User user) {
 		user.setCars(new ArrayList<>());
 		user.setPermissions(new ArrayList<>());
-		userDAO.save(user);
+		dao.save(user);
 		user.setAuthorizationToken(generateAuthToken(user));
-		userDAO.save(user);
+		dao.save(user);
 	}
 
 	private AuthorizationToken generateAuthToken(User user) {
@@ -37,25 +40,16 @@ public class UserServiceImpl implements UserService {
 		return authorizationToken;
 	}
 
-	public List<User> getAll() {
-		return userDAO.getAll();
-	}
-
+	@Transactional // ?
 	@Override
-	public User find(Long id) {
-		return userDAO.find(id);
-	}
-
-	@Override
-	public void delete(User obj) {
-		userDAO.delete(obj);
+	public void bulkUpdate(List<User> usersToBeUpdated) {
+		// TODO do update for all users
 
 	}
 
 	@Override
-	public void update(User obj) {
-		userDAO.update(obj);
-
+	protected GenericDao<User, Long> getDao() {
+		return dao;
 	}
 
 }
