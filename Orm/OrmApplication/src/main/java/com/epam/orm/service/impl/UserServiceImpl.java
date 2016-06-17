@@ -40,11 +40,12 @@ public class UserServiceImpl extends GenericServiceImpl<User, Long> implements U
 		return authorizationToken;
 	}
 
-	@Transactional // ?
+	@Transactional
 	@Override
 	public void bulkUpdate(List<User> usersToBeUpdated) {
-		// TODO do update for all users
-
+		for (User user : usersToBeUpdated) {
+			dao.update(user);
+		}
 	}
 
 	@Override

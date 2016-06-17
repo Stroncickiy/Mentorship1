@@ -1,5 +1,9 @@
 package com.epam.orm.service.impl;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
+import java.util.List;
+
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,12 +19,21 @@ public class AuthTokenServiceImpl extends GenericServiceImpl<AuthorizationToken,
 
 	@Autowired
 	protected AuthTokenDAO dao;
+	
+	private SecureRandom random = new SecureRandom();
+
+	public String nextSessionId() {
+		return new BigInteger(130, random).toString(32);
+	}
 
 	@Override
 	@Transactional
 	public void regenerateAll() {
-		// TODO Auto-generated method stub
-
+		List<AuthorizationToken> all = getAll();
+		for (AuthorizationToken authorizationToken : all) {
+			authorizationToken.setToken(nextSessionId());
+			dao.save(authorizationToken);
+		}
 	}
 
 	@Override
